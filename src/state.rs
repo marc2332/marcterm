@@ -53,8 +53,12 @@ impl PanelNode {
                 let in_a = a.contains(target);
                 let in_b = b.contains(target);
                 match dir {
-                    NavDirection::Right if in_a => Some(b.leaves()[0]),
-                    NavDirection::Left if in_b => Some(a.leaves()[0]),
+                    NavDirection::Right if in_a => a
+                        .find_neighbour(target, dir)
+                        .or_else(|| Some(b.leaves()[0])),
+                    NavDirection::Left if in_b => b
+                        .find_neighbour(target, dir)
+                        .or_else(|| Some(*a.leaves().last().unwrap())),
                     _ if in_a => a.find_neighbour(target, dir),
                     _ if in_b => b.find_neighbour(target, dir),
                     _ => None,
@@ -64,8 +68,12 @@ impl PanelNode {
                 let in_a = a.contains(target);
                 let in_b = b.contains(target);
                 match dir {
-                    NavDirection::Down if in_a => Some(b.leaves()[0]),
-                    NavDirection::Up if in_b => Some(a.leaves()[0]),
+                    NavDirection::Down if in_a => a
+                        .find_neighbour(target, dir)
+                        .or_else(|| Some(b.leaves()[0])),
+                    NavDirection::Up if in_b => b
+                        .find_neighbour(target, dir)
+                        .or_else(|| Some(*a.leaves().last().unwrap())),
                     _ if in_a => a.find_neighbour(target, dir),
                     _ if in_b => b.find_neighbour(target, dir),
                     _ => None,
