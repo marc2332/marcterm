@@ -2,15 +2,8 @@ use freya::prelude::*;
 use freya::radio::*;
 
 use crate::{
-    components::{
-        tab_bar::TabBar,
-        tab_content::TabContent,
-    },
-    state::{
-        AppChannel,
-        AppState,
-        NavDirection,
-    },
+    components::{tab_bar::TabBar, tab_content::TabContent},
+    state::{AppChannel, AppState, NavDirection},
 };
 
 #[derive(PartialEq, Clone)]

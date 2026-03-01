@@ -3,11 +3,7 @@ use freya::radio::*;
 
 use crate::{
     components::panel::Panel,
-    state::{
-        AppChannel,
-        PanelNode,
-        TabId,
-    },
+    state::{AppChannel, PanelNode, TabId},
 };
 
 #[derive(PartialEq, Clone)]

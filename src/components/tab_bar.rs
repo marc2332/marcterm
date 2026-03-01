@@ -1,10 +1,7 @@
 use freya::prelude::*;
 use freya::radio::*;
 
-use crate::state::{
-    AppChannel,
-    TabId,
-};
+use crate::state::{AppChannel, TabId};
 
 #[derive(PartialEq, Clone)]
 pub struct TabBar;

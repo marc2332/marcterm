@@ -1,14 +1,10 @@
 use std::path::PathBuf;
 
+use freya::radio::RadioChannel;
 use freya::{
-    prelude::{
-        AccessibilityId,
-        Focus,
-        UseId,
-    },
+    prelude::{AccessibilityId, Focus, UseId},
     terminal::*,
 };
-use freya::radio::RadioChannel;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub struct TabId(pub usize);
@@ -303,6 +299,7 @@ impl AppState {
         if let Some(tab) = self.active_tab_mut() {
             if let Some(neighbour) = tab.panels.find_neighbour(tab.active_panel, dir) {
                 tab.active_panel = neighbour;
+                Focus::new_for_id(neighbour).request_focus();
             }
         }
     }

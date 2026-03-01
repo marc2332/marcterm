@@ -1,13 +1,7 @@
-use freya::{
-    prelude::*,
-    terminal::*,
-};
 use freya::radio::*;
+use freya::{prelude::*, terminal::*};
 
-use crate::state::{
-    AppChannel,
-    TabId,
-};
+use crate::state::{AppChannel, TabId};
 
 #[derive(PartialEq, Clone)]
 pub struct Panel {

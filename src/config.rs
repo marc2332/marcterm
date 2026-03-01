@@ -13,7 +13,7 @@ pub struct Config {
 }
 
 fn default_shell() -> String {
-    "nu".to_string()
+    "bash".to_string()
 }
 
 fn default_font_size() -> f32 {

@@ -59,7 +59,7 @@ marcterm reads its config from `~/.config/marcterm.toml`.
 
 ```toml
 # Shell binary to launch.
-shell = "nu"
+shell = "bash"
 
 # Font size in logical pixels.
 font_size = 14.0
