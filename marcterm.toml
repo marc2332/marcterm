@@ -1,0 +1,8 @@
+# marcterm configuration
+# Copy this file to ~/.config/marcterm.toml to customize.
+
+# Shell binary to launch.
+shell = "nu"
+
+# Font size in logical pixels.
+font_size = 14.0
