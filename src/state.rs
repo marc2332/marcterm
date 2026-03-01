@@ -225,6 +225,21 @@ impl AppState {
         }
     }
 
+    pub fn close_tab_by_id(&mut self, tab_id: TabId) {
+        if self.tabs.len() <= 1 {
+            return;
+        }
+        if let Some(idx) = self.tabs.iter().position(|t| t.id == tab_id) {
+            self.tabs.remove(idx);
+            if self.active_tab >= self.tabs.len() {
+                self.active_tab = self.tabs.len() - 1;
+            }
+            if let Some(tab) = self.tabs.get(self.active_tab) {
+                Focus::new_for_id(tab.active_panel).request_focus();
+            }
+        }
+    }
+
     pub fn next_tab(&mut self) {
         if self.tabs.is_empty() {
             return;

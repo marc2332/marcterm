@@ -23,6 +23,7 @@ impl Component for TabBar {
         rect()
             .width(Size::fill())
             .height(Size::px(36.))
+            .cross_align(Alignment::Center)
             .background((20, 20, 20))
             .padding(4.)
             .spacing(4.)
@@ -36,16 +37,16 @@ impl Component for TabBar {
                 .into_element()
             }))
             .child(
-                rect()
-                    .width(Size::px(36.))
-                    .height(Size::fill())
-                    .center()
-                    .corner_radius(4.)
-                    .color((180, 180, 180))
-                    .on_mouse_up(move |_: Event<MouseEventData>| {
+                Button::new()
+                    .flat()
+                    .width(Size::px(20.))
+                    .height(Size::px(20.))
+                    .compact()
+                    .rounded_full()
+                    .on_press(move |_| {
                         radio.write_channel(AppChannel::Tabs).new_tab();
                     })
-                    .child("+"),
+                    .child(label().text("+").font_size(14.)),
             )
     }
 }
@@ -96,6 +97,7 @@ impl Component for TabButton {
                     .child(
                         label()
                             .text(self.title.clone())
+                            .font_size(14.)
                             .text_overflow(TextOverflow::Ellipsis),
                     )
                     .child(
@@ -107,20 +109,16 @@ impl Component for TabButton {
                             .rounded_full()
                             .on_press(move |e: Event<PressEventData>| {
                                 e.stop_propagation();
-                                let mut state = radio.write_channel(AppChannel::Tabs);
-                                if let Some(idx) = state.tabs.iter().position(|t| t.id == tab_id) {
-                                    if state.tabs.len() > 1 {
-                                        state.tabs.remove(idx);
-                                        if state.active_tab >= state.tabs.len() {
-                                            state.active_tab = state.tabs.len() - 1;
-                                        }
-                                        if let Some(tab) = state.tabs.get(state.active_tab) {
-                                            Focus::new_for_id(tab.active_panel).request_focus();
-                                        }
-                                    }
-                                }
+                                radio
+                                    .write_channel(AppChannel::Tabs)
+                                    .close_tab_by_id(tab_id);
                             })
-                            .child(label().text("X").font_size(14.)),
+                            .child(
+                                label()
+                                    .text("X")
+                                    .font_size(10.)
+                                    .text_height(TextHeightBehavior::All),
+                            ),
                     ),
             )
     }
