@@ -1253,8 +1253,9 @@ checksum = "aa9a19cbb55df58761df49b23516a86d432839add4af60fc256da840f66ed35b"
 
 [[package]]
 name = "freya"
-version = "0.4.0-rc.10"
-source = "git+https://github.com/marc2332/freya#f92269800d0c6ae5968242206dfe218769973965"
+version = "0.4.0-rc.11"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "ba9e0a4fe5e8cd49e6027bcb392ace11d54129b674c0fe185134c35a4b4e5d3b"
 dependencies = [
  "cfg-if",
  "freya-animation",
@@ -1271,8 +1272,9 @@ dependencies = [
 
 [[package]]
 name = "freya-animation"
-version = "0.4.0-rc.10"
-source = "git+https://github.com/marc2332/freya#f92269800d0c6ae5968242206dfe218769973965"
+version = "0.4.0-rc.11"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "69066638a9937eef704728e635566b4c6da936b0efa887199e7daa92e97db2a6"
 dependencies = [
  "async-io",
  "easer",
@@ -1281,8 +1283,9 @@ dependencies = [
 
 [[package]]
 name = "freya-clipboard"
-version = "0.4.0-rc.10"
-source = "git+https://github.com/marc2332/freya#f92269800d0c6ae5968242206dfe218769973965"
+version = "0.4.0-rc.11"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "c97ba8bcd9684b1685332ce92e2bf15e9fa7708f71b83dc3db90c5bbc2817485"
 dependencies = [
  "copypasta",
  "freya-core",
@@ -1290,8 +1293,9 @@ dependencies = [
 
 [[package]]
 name = "freya-components"
-version = "0.4.0-rc.10"
-source = "git+https://github.com/marc2332/freya#f92269800d0c6ae5968242206dfe218769973965"
+version = "0.4.0-rc.11"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "97eba2ce867a46eb93838319b09977fc23616b31b33c918d15f9dcf50bf42edc"
 dependencies = [
  "accesskit",
  "anyhow",
@@ -1312,8 +1316,9 @@ dependencies = [
 
 [[package]]
 name = "freya-core"
-version = "0.4.0-rc.10"
-source = "git+https://github.com/marc2332/freya#f92269800d0c6ae5968242206dfe218769973965"
+version = "0.4.0-rc.11"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "5d6862aab2126d750416498b20f41e4dc56e2c7c96db6e72762396165db537d1"
 dependencies = [
  "accesskit",
  "async-broadcast",
@@ -1339,8 +1344,9 @@ dependencies = [
 
 [[package]]
 name = "freya-edit"
-version = "0.4.0-rc.10"
-source = "git+https://github.com/marc2332/freya#f92269800d0c6ae5968242206dfe218769973965"
+version = "0.4.0-rc.11"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "b9d9a6319e1547ca57972b43a997b8a04cba94e5dd2b60eb4be1f7e5dd1c6711"
 dependencies = [
  "bitflags 2.11.0",
  "freya-clipboard",
@@ -1353,8 +1359,9 @@ dependencies = [
 
 [[package]]
 name = "freya-engine"
-version = "0.4.0-rc.10"
-source = "git+https://github.com/marc2332/freya#f92269800d0c6ae5968242206dfe218769973965"
+version = "0.4.0-rc.11"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "b885651d20995727eeecaf9e4d2c8b94b192c51e860bc276d4af73f3b63ef694"
 dependencies = [
  "bitflags 2.11.0",
  "glutin",
@@ -1363,16 +1370,18 @@ dependencies = [
 
 [[package]]
 name = "freya-radio"
-version = "0.4.0-rc.10"
-source = "git+https://github.com/marc2332/freya#f92269800d0c6ae5968242206dfe218769973965"
+version = "0.4.0-rc.11"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "14a4922089e1b21e6427414ecedf0c4a79df321b3d7fdee1f530a95c471c9aec"
 dependencies = [
  "freya-core",
 ]
 
 [[package]]
 name = "freya-sdk"
-version = "0.4.0-rc.10"
-source = "git+https://github.com/marc2332/freya#f92269800d0c6ae5968242206dfe218769973965"
+version = "0.4.0-rc.11"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "0bd4e0495de9fd11c9cbff513a0129107d28a69025c80b15db7296666efa5883"
 dependencies = [
  "async-io",
  "freya-core",
@@ -1381,8 +1390,9 @@ dependencies = [
 
 [[package]]
 name = "freya-terminal"
-version = "0.4.0-rc.10"
-source = "git+https://github.com/marc2332/freya#f92269800d0c6ae5968242206dfe218769973965"
+version = "0.4.0-rc.11"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "bfa1a267a660e82eb6450ead7c06e71cd15127725b2b58fe1464862c8e96ffd1"
 dependencies = [
  "blocking",
  "freya-core",
@@ -1400,8 +1410,9 @@ dependencies = [
 
 [[package]]
 name = "freya-winit"
-version = "0.4.0-rc.10"
-source = "git+https://github.com/marc2332/freya#f92269800d0c6ae5968242206dfe218769973965"
+version = "0.4.0-rc.11"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e708f304aeee54a94995e41bc546c31921a7ad3adeb21795645e0d680e1f8a97"
 dependencies = [
  "accesskit",
  "accesskit_winit",
@@ -1982,12 +1993,12 @@ dependencies = [
 
 [[package]]
 name = "marcterm"
-version = "0.0.0"
+version = "0.1.0"
 dependencies = [
  "dirs 6.0.0",
  "freya",
  "serde",
- "toml 0.8.2",
+ "toml 0.9.12+spec-1.1.0",
 ]
 
 [[package]]
@@ -2586,8 +2597,9 @@ checksum = "35fb2e5f958ec131621fdd531e9fc186ed768cbe395337403ae56c17a74c68ec"
 
 [[package]]
 name = "pathgraph"
-version = "0.4.0-rc.10"
-source = "git+https://github.com/marc2332/freya#f92269800d0c6ae5968242206dfe218769973965"
+version = "0.4.0-rc.11"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "61b580f24a6718c17c93551cd0fb885dcb6cb4df076574e19be1707bcdcc90bf"
 
 [[package]]
 name = "percent-encoding"
@@ -2818,7 +2830,7 @@ version = "3.4.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "219cb19e96be00ab2e37d6e299658a0cfa83e52429179969b0f0121b4ac46983"
 dependencies = [
- "toml_edit 0.23.10+spec-1.0.0",
+ "toml_edit",
 ]
 
 [[package]]
@@ -2900,8 +2912,9 @@ checksum = "69cdb34c158ceb288df11e18b4bd39de994f6657d83847bdffdbd7f346754b0f"
 
 [[package]]
 name = "ragnarok"
-version = "0.4.0-rc.10"
-source = "git+https://github.com/marc2332/freya#f92269800d0c6ae5968242206dfe218769973965"
+version = "0.4.0-rc.11"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "fc42889839589bab22926b8602db800f004c464d9ac0b95c4da4b35e58b2d945"
 dependencies = [
  "euclid",
  "hotpath",
@@ -3272,15 +3285,6 @@ dependencies = [
  "proc-macro2",
  "quote",
  "syn 2.0.117",
-]
-
-[[package]]
-name = "serde_spanned"
-version = "0.6.9"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "bf41e0cfaf7226dca15e8197172c295a782857fcb97fad1808a166870dee75a3"
-dependencies = [
- "serde",
 ]
 
 [[package]]
@@ -3740,14 +3744,17 @@ dependencies = [
 
 [[package]]
 name = "toml"
-version = "0.8.2"
+version = "0.9.12+spec-1.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "185d8ab0dfbb35cf1399a6344d8484209c088f75f8f68230da55d48d95d43e3d"
+checksum = "cf92845e79fc2e2def6a5d828f0801e29a2f8acc037becc5ab08595c7d5e9863"
 dependencies = [
- "serde",
- "serde_spanned 0.6.9",
- "toml_datetime 0.6.3",
- "toml_edit 0.20.2",
+ "indexmap",
+ "serde_core",
+ "serde_spanned",
+ "toml_datetime 0.7.5+spec-1.1.0",
+ "toml_parser",
+ "toml_writer",
+ "winnow",
 ]
 
 [[package]]
@@ -3758,20 +3765,11 @@ checksum = "c7614eaf19ad818347db24addfa201729cf2a9b6fdfd9eb0ab870fcacc606c0c"
 dependencies = [
  "indexmap",
  "serde_core",
- "serde_spanned 1.0.4",
+ "serde_spanned",
  "toml_datetime 1.0.0+spec-1.1.0",
  "toml_parser",
  "toml_writer",
- "winnow 0.7.14",
-]
-
-[[package]]
-name = "toml_datetime"
-version = "0.6.3"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7cda73e2f1397b1262d6dfdcef8aafae14d1de7748d66822d3bfeeb6d03e5e4b"
-dependencies = [
- "serde",
+ "winnow",
 ]
 
 [[package]]
@@ -3794,19 +3792,6 @@ dependencies = [
 
 [[package]]
 name = "toml_edit"
-version = "0.20.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "396e4d48bbb2b7554c944bde63101b5ae446cff6ec4a24227428f15eb72ef338"
-dependencies = [
- "indexmap",
- "serde",
- "serde_spanned 0.6.9",
- "toml_datetime 0.6.3",
- "winnow 0.5.40",
-]
-
-[[package]]
-name = "toml_edit"
 version = "0.23.10+spec-1.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "84c8b9f757e028cee9fa244aea147aab2a9ec09d5325a9b01e0a49730c2b5269"
@@ -3814,7 +3799,7 @@ dependencies = [
  "indexmap",
  "toml_datetime 0.7.5+spec-1.1.0",
  "toml_parser",
- "winnow 0.7.14",
+ "winnow",
 ]
 
 [[package]]
@@ -3823,7 +3808,7 @@ version = "1.0.9+spec-1.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "702d4415e08923e7e1ef96cd5727c0dfed80b4d2fa25db9647fe5eb6f7c5a4c4"
 dependencies = [
- "winnow 0.7.14",
+ "winnow",
 ]
 
 [[package]]
@@ -3834,8 +3819,9 @@ checksum = "ab16f14aed21ee8bfd8ec22513f7287cd4a91aa92e44edfe2c17ddd004e92607"
 
 [[package]]
 name = "torin"
-version = "0.4.0-rc.10"
-source = "git+https://github.com/marc2332/freya#f92269800d0c6ae5968242206dfe218769973965"
+version = "0.4.0-rc.11"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "962c25a717f9d5077c88dd3113407cc0ec2df7196e6f5fbcb6bc0ac1fe0fb860"
 dependencies = [
  "euclid",
  "itertools 0.14.0",
@@ -4712,15 +4698,6 @@ dependencies = [
 
 [[package]]
 name = "winnow"
-version = "0.5.40"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f593a95398737aeed53e489c785df13f3618e41dbcd6718c6addbf1395aa6876"
-dependencies = [
- "memchr",
-]
-
-[[package]]
-name = "winnow"
 version = "0.7.14"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "5a5364e9d77fcdeeaa6062ced926ee3381faa2ee02d3eb83a5c27a8825540829"
@@ -4943,7 +4920,7 @@ dependencies = [
  "uds_windows",
  "uuid",
  "windows-sys 0.61.2",
- "winnow 0.7.14",
+ "winnow",
  "zbus_macros",
  "zbus_names",
  "zvariant",
@@ -4995,7 +4972,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "ffd8af6d5b78619bab301ff3c560a5bd22426150253db278f164d6cf3b72c50f"
 dependencies = [
  "serde",
- "winnow 0.7.14",
+ "winnow",
  "zvariant",
 ]
 
@@ -5085,7 +5062,7 @@ dependencies = [
  "endi",
  "enumflags2",
  "serde",
- "winnow 0.7.14",
+ "winnow",
  "zvariant_derive",
  "zvariant_utils",
 ]
@@ -5113,5 +5090,5 @@ dependencies = [
  "quote",
  "serde",
  "syn 2.0.117",
- "winnow 0.7.14",
+ "winnow",
 ]
