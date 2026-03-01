@@ -8,6 +8,12 @@ Terminal emulator built with [Freya](https://github.com/marc2332/freya) and Rust
 
 ---
 
+## 📦 Installation
+
+```sh
+cargo install marcterm
+```
+
 ## ✨ Features
 
 - 🗂️ **Tabs** — open and manage multiple terminal sessions
