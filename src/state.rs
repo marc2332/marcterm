@@ -102,6 +102,17 @@ impl PanelNode {
         }
     }
 
+    pub fn all_handles(&self) -> Vec<TerminalHandle> {
+        match self {
+            PanelNode::Leaf(_, h) => vec![h.clone()],
+            PanelNode::Horizontal(a, b) | PanelNode::Vertical(a, b) => {
+                let mut v = a.all_handles();
+                v.extend(b.all_handles());
+                v
+            }
+        }
+    }
+
     pub fn handle(&self, id: AccessibilityId) -> Option<&TerminalHandle> {
         match self {
             PanelNode::Leaf(pid, h) if *pid == id => Some(h),

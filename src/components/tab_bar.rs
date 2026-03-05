@@ -106,6 +106,7 @@ impl Component for TabButton {
                         label()
                             .text(self.title.clone())
                             .font_size(14.)
+                            .max_width(Size::px(200.))
                             .text_overflow(TextOverflow::Ellipsis),
                     )
                     .child(

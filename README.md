@@ -67,10 +67,10 @@ shell = "bash"
 font_size = 14.0
 ```
 
-Copy the bundled `marcterm.toml` as a starting point:
+Copy the bundled `marcterm.demo.toml` as a starting point:
 
 ```sh
-cp marcterm.toml ~/.config/marcterm.toml
+cp marcterm.demo.toml ~/.config/marcterm.toml
 ```
 
 ## 🔨 Building from source

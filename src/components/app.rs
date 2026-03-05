@@ -1,10 +1,37 @@
 use freya::prelude::*;
 use freya::radio::*;
+use freya::terminal::{TerminalHandle, TerminalId};
 
 use crate::{
     components::{tab_bar::TabBar, tab_content::TabContent},
-    state::{AppChannel, AppState, NavDirection},
+    state::{AppChannel, AppState, NavDirection, TabId},
 };
+
+enum TitleWatchResult {
+    Changed(TabId, String),
+    Closed(TerminalId),
+}
+
+async fn watch_handle(tab_id: TabId, handle: TerminalHandle) -> TitleWatchResult {
+    let closed = futures::future::select(
+        Box::pin(async {
+            handle.clone().title_changed().await;
+            false
+        }),
+        Box::pin(async {
+            handle.clone().closed().await;
+            true
+        }),
+    )
+    .await;
+
+    match closed {
+        futures::future::Either::Left(_) => {
+            TitleWatchResult::Changed(tab_id, handle.title().unwrap_or_default())
+        }
+        futures::future::Either::Right(_) => TitleWatchResult::Closed(handle.id()),
+    }
+}
 
 #[derive(PartialEq, Clone)]
 pub struct App {
@@ -23,6 +50,44 @@ impl Component for App {
         });
 
         let mut radio = use_radio(AppChannel::Tabs);
+
+        use_future(move || async move {
+            let mut closed_ids = std::collections::HashSet::<TerminalId>::new();
+            loop {
+                let watchers = {
+                    let state = radio.read();
+                    state
+                        .tabs
+                        .iter()
+                        .flat_map(|tab| {
+                            let tab_id = tab.id;
+                            tab.panels
+                                .all_handles()
+                                .into_iter()
+                                .filter(|h| !closed_ids.contains(&h.id()))
+                                .map(move |h| Box::pin(watch_handle(tab_id, h)))
+                        })
+                        .collect::<Vec<_>>()
+                };
+
+                match futures::future::select_all(watchers).await.0 {
+                    TitleWatchResult::Changed(tab_id, title) if !title.is_empty() => {
+                        if let Some(tab) = radio
+                            .write_channel(AppChannel::Tabs)
+                            .tabs
+                            .iter_mut()
+                            .find(|t| t.id == tab_id)
+                        {
+                            tab.title = title;
+                        }
+                    }
+                    TitleWatchResult::Closed(terminal_id) => {
+                        closed_ids.insert(terminal_id);
+                    }
+                    _ => {}
+                }
+            }
+        });
 
         rect()
             .expanded()

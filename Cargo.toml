@@ -21,3 +21,4 @@ freya = { version = "0.4.0-rc.12", features = [
 serde = { version = "1", features = ["derive"] }
 toml = "0.9"
 dirs = "6"
+futures = "0.3"
