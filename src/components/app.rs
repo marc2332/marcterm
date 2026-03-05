@@ -57,6 +57,14 @@ impl Component for App {
                     Key::Character(ch) if alt && ch == "-" => {
                         radio.write_channel(AppChannel::Tabs).close_active_panel();
                     }
+                    Key::Character(ch) if alt && ch == "4" => {
+                        radio.write_channel(AppChannel::Tabs).split_into_grid();
+                    }
+                    Key::Character(ch) if alt && ch == "1" => {
+                        radio
+                            .write_channel(AppChannel::Tabs)
+                            .close_all_except_active();
+                    }
                     Key::Named(NamedKey::ArrowLeft) if alt => {
                         radio
                             .write_channel(AppChannel::Tabs)

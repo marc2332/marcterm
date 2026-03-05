@@ -305,6 +305,47 @@ impl AppState {
         }
     }
 
+    // 4 panels grid
+    pub fn split_into_grid(&mut self) {
+        let shell = self.shell.clone();
+        let cwd = self
+            .active_tab()
+            .and_then(|tab| tab.panels.handle(tab.active_panel))
+            .and_then(|h| h.cwd());
+
+        let (_, new_1) = PanelNode::new_leaf(&shell, cwd.clone());
+        let (_, new_2) = PanelNode::new_leaf(&shell, cwd.clone());
+        let (_, new_3) = PanelNode::new_leaf(&shell, cwd);
+
+        if let Some(tab) = self.active_tab_mut() {
+            let original_leaf = PanelNode::Leaf(
+                tab.active_panel,
+                tab.panels.handle(tab.active_panel).cloned().unwrap(),
+            );
+            let grid = PanelNode::Vertical(
+                Box::new(PanelNode::Horizontal(
+                    Box::new(original_leaf),
+                    Box::new(new_1),
+                )),
+                Box::new(PanelNode::Horizontal(Box::new(new_2), Box::new(new_3))),
+            );
+            tab.panels = tab.panels.clone().replace_leaf(tab.active_panel, grid);
+            // active_panel stays as the original (top-left) leaf
+        }
+    }
+
+    /// Collapses the current tab to only its active panel, closing all others.
+    pub fn close_all_except_active(&mut self) {
+        if let Some(tab) = self.active_tab_mut() {
+            let active_id = tab.active_panel;
+            let active_leaf =
+                PanelNode::Leaf(active_id, tab.panels.handle(active_id).cloned().unwrap());
+            tab.panels = active_leaf;
+            // active_panel stays the same
+            Focus::new_for_id(active_id).request_focus();
+        }
+    }
+
     pub fn close_active_panel(&mut self) {
         if let Some(tab) = self.active_tab_mut() {
             if let Some(new_root) = tab.panels.clone().remove_leaf(tab.active_panel) {

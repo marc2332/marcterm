@@ -17,7 +17,7 @@ cargo install marcterm
 ## ✨ Features
 
 - 🗂️ **Tabs** — open and manage multiple terminal sessions
-- ➗ **Panel splitting** — split any panel horizontally or vertically into a tiling layout
+- ➗ **Panel splitting** — split any panel horizontally, vertically, or into a 2x2 grid
 - ↔️ **Resizable panes** — drag to resize split panels
 - 🔡 **Adjustable font size** — change at runtime with a keyboard shortcut
 
@@ -38,7 +38,9 @@ cargo install marcterm
 |---|---|
 | `Alt+P` | Split panel vertically (top/bottom) |
 | `Alt++ / Alt+=` | Split panel horizontally (left/right) |
+| `Alt+4` | Split panel into 2x2 grid |
 | `Alt+-` | Close active panel |
+| `Alt+1` | Close all panels except active |
 | `Alt+←` | Focus panel to the left |
 | `Alt+→` | Focus panel to the right |
 | `Alt+↑` | Focus panel above |
