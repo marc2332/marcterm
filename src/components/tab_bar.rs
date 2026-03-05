@@ -1,3 +1,5 @@
+use freya::icons::lucide;
+use freya::material_design::ButtonRippleExt;
 use freya::prelude::*;
 use freya::radio::*;
 
@@ -77,9 +79,8 @@ impl Component for TabButton {
 
         Button::new()
             .height(Size::fill())
-            .padding((4., 12., 4., 12.))
             .flat()
-            .rounded_full()
+            .rounded_2xl()
             .background(background)
             .hover_background((45, 45, 45))
             .color(text_color)
@@ -89,6 +90,8 @@ impl Component for TabButton {
                     state.active_tab = idx;
                 }
             })
+            .ripple()
+            .color((230, 230, 230))
             .child(
                 rect()
                     .horizontal()
@@ -114,10 +117,11 @@ impl Component for TabButton {
                                     .close_tab_by_id(tab_id);
                             })
                             .child(
-                                label()
-                                    .text("X")
-                                    .font_size(10.)
-                                    .text_height(TextHeightBehavior::All),
+                                svg(lucide::x())
+                                    .width(Size::px(14.))
+                                    .height(Size::px(14.))
+                                    .stroke(Some(Color::from((200, 200, 200))))
+                                    .fill((200, 200, 200)),
                             ),
                     ),
             )

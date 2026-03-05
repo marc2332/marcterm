@@ -1264,6 +1264,8 @@ dependencies = [
  "freya-core",
  "freya-edit",
  "freya-engine",
+ "freya-icons",
+ "freya-material-design",
  "freya-radio",
  "freya-terminal",
  "freya-winit",
@@ -1366,6 +1368,28 @@ dependencies = [
  "bitflags 2.11.0",
  "glutin",
  "skia-safe",
+]
+
+[[package]]
+name = "freya-icons"
+version = "0.4.0-rc.11"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "0c01206ef0b64c7e5f20b573a46de92f9d3b11a6978aec324b489783c1fb7155"
+dependencies = [
+ "bytes",
+]
+
+[[package]]
+name = "freya-material-design"
+version = "0.4.0-rc.11"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "86eb53952a0142e47ea6dc6f9bcf1c75e807674b58b3d370cdbcc593bc16c7f0"
+dependencies = [
+ "freya-animation",
+ "freya-components",
+ "freya-core",
+ "freya-engine",
+ "torin",
 ]
 
 [[package]]
