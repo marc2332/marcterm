@@ -15,6 +15,12 @@ impl TabId {
     }
 }
 
+#[derive(Clone, Copy, PartialEq)]
+pub enum Axis {
+    Horizontal,
+    Vertical,
+}
+
 #[derive(Clone, PartialEq)]
 pub enum PanelNode {
     Leaf(AccessibilityId, TerminalHandle),
@@ -53,12 +59,14 @@ impl PanelNode {
                 let in_a = a.contains(target);
                 let in_b = b.contains(target);
                 match dir {
-                    NavDirection::Right if in_a => a
-                        .find_neighbour(target, dir)
-                        .or_else(|| Some(b.leaves()[0])),
-                    NavDirection::Left if in_b => b
-                        .find_neighbour(target, dir)
-                        .or_else(|| Some(*a.leaves().last().unwrap())),
+                    NavDirection::Right if in_a => a.find_neighbour(target, dir).or_else(|| {
+                        a.leaf_fraction(target, Axis::Vertical)
+                            .and_then(|frac| b.leaf_at_fraction(frac, Axis::Vertical))
+                    }),
+                    NavDirection::Left if in_b => b.find_neighbour(target, dir).or_else(|| {
+                        b.leaf_fraction(target, Axis::Vertical)
+                            .and_then(|frac| a.leaf_at_fraction(frac, Axis::Vertical))
+                    }),
                     _ if in_a => a.find_neighbour(target, dir),
                     _ if in_b => b.find_neighbour(target, dir),
                     _ => None,
@@ -68,12 +76,14 @@ impl PanelNode {
                 let in_a = a.contains(target);
                 let in_b = b.contains(target);
                 match dir {
-                    NavDirection::Down if in_a => a
-                        .find_neighbour(target, dir)
-                        .or_else(|| Some(b.leaves()[0])),
-                    NavDirection::Up if in_b => b
-                        .find_neighbour(target, dir)
-                        .or_else(|| Some(*a.leaves().last().unwrap())),
+                    NavDirection::Down if in_a => a.find_neighbour(target, dir).or_else(|| {
+                        a.leaf_fraction(target, Axis::Horizontal)
+                            .and_then(|frac| b.leaf_at_fraction(frac, Axis::Horizontal))
+                    }),
+                    NavDirection::Up if in_b => b.find_neighbour(target, dir).or_else(|| {
+                        b.leaf_fraction(target, Axis::Horizontal)
+                            .and_then(|frac| a.leaf_at_fraction(frac, Axis::Horizontal))
+                    }),
                     _ if in_a => a.find_neighbour(target, dir),
                     _ if in_b => b.find_neighbour(target, dir),
                     _ => None,
@@ -98,6 +108,76 @@ impl PanelNode {
                 let mut v = a.leaves();
                 v.extend(b.leaves());
                 v
+            }
+        }
+    }
+
+    pub fn leaf_fraction(&self, id: AccessibilityId, axis: Axis) -> Option<f64> {
+        match self {
+            PanelNode::Leaf(pid, _) if *pid == id => Some(0.0),
+            PanelNode::Leaf(_, _) => None,
+            PanelNode::Horizontal(a, b) => {
+                if a.contains(id) {
+                    a.leaf_fraction(id, axis)
+                        .map(|f| if axis == Axis::Horizontal { f * 0.5 } else { f })
+                } else if b.contains(id) {
+                    b.leaf_fraction(id, axis).map(|f| {
+                        if axis == Axis::Horizontal {
+                            0.5 + f * 0.5
+                        } else {
+                            f
+                        }
+                    })
+                } else {
+                    None
+                }
+            }
+            PanelNode::Vertical(a, b) => {
+                if a.contains(id) {
+                    a.leaf_fraction(id, axis).map(
+                        |f| {
+                            if axis == Axis::Vertical { f * 0.5 } else { f }
+                        },
+                    )
+                } else if b.contains(id) {
+                    b.leaf_fraction(id, axis).map(|f| {
+                        if axis == Axis::Vertical {
+                            0.5 + f * 0.5
+                        } else {
+                            f
+                        }
+                    })
+                } else {
+                    None
+                }
+            }
+        }
+    }
+
+    pub fn leaf_at_fraction(&self, fraction: f64, axis: Axis) -> Option<AccessibilityId> {
+        match self {
+            PanelNode::Leaf(id, _) => Some(*id),
+            PanelNode::Horizontal(a, b) => {
+                if axis == Axis::Horizontal {
+                    if fraction < 0.5 {
+                        a.leaf_at_fraction(fraction * 2.0, axis)
+                    } else {
+                        b.leaf_at_fraction((fraction - 0.5) * 2.0, axis)
+                    }
+                } else {
+                    a.leaf_at_fraction(fraction, axis)
+                }
+            }
+            PanelNode::Vertical(a, b) => {
+                if axis == Axis::Vertical {
+                    if fraction < 0.5 {
+                        a.leaf_at_fraction(fraction * 2.0, axis)
+                    } else {
+                        b.leaf_at_fraction((fraction - 0.5) * 2.0, axis)
+                    }
+                } else {
+                    a.leaf_at_fraction(fraction, axis)
+                }
             }
         }
     }
@@ -333,12 +413,12 @@ impl AppState {
                 tab.active_panel,
                 tab.panels.handle(tab.active_panel).cloned().unwrap(),
             );
-            let grid = PanelNode::Vertical(
-                Box::new(PanelNode::Horizontal(
+            let grid = PanelNode::Horizontal(
+                Box::new(PanelNode::Vertical(
                     Box::new(original_leaf),
                     Box::new(new_1),
                 )),
-                Box::new(PanelNode::Horizontal(Box::new(new_2), Box::new(new_3))),
+                Box::new(PanelNode::Vertical(Box::new(new_2), Box::new(new_3))),
             );
             tab.panels = tab.panels.clone().replace_leaf(tab.active_panel, grid);
             // active_panel stays as the original (top-left) leaf
