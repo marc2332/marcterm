@@ -52,7 +52,7 @@ impl Component for TabBar {
                         svg(lucide::circle_plus())
                             .width(Size::px(16.))
                             .height(Size::px(16.))
-                            .stroke(Some(Color::from((200, 200, 200)))),
+                            .stroke((200, 200, 200)),
                     ),
             )
     }
@@ -126,7 +126,7 @@ impl Component for TabButton {
                                 svg(lucide::x())
                                     .width(Size::px(14.))
                                     .height(Size::px(14.))
-                                    .stroke(Some(Color::from((200, 200, 200)))),
+                                    .stroke((200, 200, 200)),
                             ),
                     ),
             )

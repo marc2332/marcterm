@@ -2067,7 +2067,7 @@ dependencies = [
 
 [[package]]
 name = "marcterm"
-version = "0.1.4"
+version = "0.1.5"
 dependencies = [
  "dirs 6.0.0",
  "freya",
