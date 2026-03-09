@@ -12,7 +12,7 @@ name = "marcterm"
 path = "src/main.rs"
 
 [dependencies]
-freya = { version = "0.4.0-rc.12", features = [
+freya = { version = "0.4.0-rc.13", features = [
   "terminal",
   "radio",
   "material-design",
