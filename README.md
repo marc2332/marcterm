@@ -1,6 +1,12 @@
-# marcterm 🖥️
+<p align="center">
+  <img src="icon.png" alt="marcterm logo" width="128" />
+</p>
 
-Terminal emulator built with [Freya](https://github.com/marc2332/freya) and Rust 🦀.
+<h1 align="center">marcterm 🖥️</h1>
+
+<p align="center">
+  Terminal emulator built with <a href="https://github.com/marc2332/freya">Freya</a> and Rust 🦀
+</p>
 
 ---
 
