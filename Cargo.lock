@@ -2069,6 +2069,7 @@ dependencies = [
 name = "marcterm"
 version = "0.1.6"
 dependencies = [
+ "async-io",
  "dirs 6.0.0",
  "freya",
  "futures",

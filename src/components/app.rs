@@ -1,3 +1,6 @@
+use std::time::{Duration, Instant};
+
+use async_io::Timer;
 use freya::prelude::*;
 use freya::radio::*;
 use freya::terminal::{TerminalHandle, TerminalId};
@@ -7,30 +10,32 @@ use crate::{
     state::{AppChannel, AppState, NavDirection, TabId},
 };
 
-enum TitleWatchResult {
-    Changed(TabId, String),
+enum WatchResult {
+    TitleChanged(TabId, String),
     Closed(TerminalId),
+    OutputReceived(TabId),
 }
 
-async fn watch_handle(tab_id: TabId, handle: TerminalHandle) -> TitleWatchResult {
-    let closed = futures::future::select(
-        Box::pin(async {
-            handle.clone().title_changed().await;
-            false
+async fn watch_handle(tab_id: TabId, handle: TerminalHandle) -> WatchResult {
+    let id = handle.id();
+    let h1 = handle.clone();
+    let h2 = handle.clone();
+    futures::future::select_all([
+        Box::pin(async move {
+            h1.title_changed().await;
+            WatchResult::TitleChanged(tab_id, h1.title().unwrap_or_default())
+        }) as std::pin::Pin<Box<dyn futures::Future<Output = WatchResult>>>,
+        Box::pin(async move {
+            h2.closed().await;
+            WatchResult::Closed(id)
         }),
-        Box::pin(async {
-            handle.clone().closed().await;
-            true
+        Box::pin(async move {
+            handle.output_received().await;
+            WatchResult::OutputReceived(tab_id)
         }),
-    )
-    .await;
-
-    match closed {
-        futures::future::Either::Left(_) => {
-            TitleWatchResult::Changed(tab_id, handle.title().unwrap_or_default())
-        }
-        futures::future::Either::Right(_) => TitleWatchResult::Closed(handle.id()),
-    }
+    ])
+    .await
+    .0
 }
 
 #[derive(PartialEq, Clone)]
@@ -51,10 +56,15 @@ impl Component for App {
 
         let mut radio = use_radio(AppChannel::Tabs);
 
+        // Watch for title changes, terminal closures, and output activity.
         use_future(move || async move {
+            let idle = Duration::from_secs(1);
             let mut closed_ids = std::collections::HashSet::<TerminalId>::new();
+            let mut last_output: std::collections::HashMap<TabId, Instant> =
+                std::collections::HashMap::new();
+
             loop {
-                let watchers = {
+                let watchers: Vec<_> = {
                     let state = radio.read();
                     state
                         .tabs
@@ -67,24 +77,75 @@ impl Component for App {
                                 .filter(|h| !closed_ids.contains(&h.id()))
                                 .map(move |h| Box::pin(watch_handle(tab_id, h)))
                         })
-                        .collect::<Vec<_>>()
+                        .collect()
                 };
 
-                match futures::future::select_all(watchers).await.0 {
-                    TitleWatchResult::Changed(tab_id, title) if !title.is_empty() => {
-                        if let Some(tab) = radio
-                            .write_channel(AppChannel::Tabs)
-                            .tabs
-                            .iter_mut()
-                            .find(|t| t.id == tab_id)
-                        {
-                            tab.title = title;
+                if watchers.is_empty() {
+                    Timer::after(Duration::from_millis(100)).await;
+                    continue;
+                }
+
+                // Race all handle watchers against the idle timeout.
+                match futures::future::select(
+                    Box::pin(futures::future::select_all(watchers)),
+                    Box::pin(Timer::after(idle)),
+                )
+                .await
+                {
+                    futures::future::Either::Left(((result, _, _), _)) => match result {
+                        WatchResult::TitleChanged(tab_id, title) if !title.is_empty() => {
+                            if let Some(tab) = radio
+                                .write_channel(AppChannel::Tabs)
+                                .tabs
+                                .iter_mut()
+                                .find(|t| t.id == tab_id)
+                            {
+                                tab.title = title;
+                            }
+                        }
+                        WatchResult::Closed(terminal_id) => {
+                            closed_ids.insert(terminal_id);
+                        }
+                        WatchResult::OutputReceived(tab_id) => {
+                            last_output.insert(tab_id, Instant::now());
+                            let state = radio.read();
+                            if state.tabs.iter().any(|t| t.id == tab_id && !t.outputting) {
+                                drop(state);
+                                if let Some(tab) = radio
+                                    .write_channel(AppChannel::Tabs)
+                                    .tabs
+                                    .iter_mut()
+                                    .find(|t| t.id == tab_id)
+                                {
+                                    tab.outputting = true;
+                                }
+                            }
+                        }
+                        _ => {}
+                    },
+                    futures::future::Either::Right(_) => {}
+                }
+
+                // Sweep stale outputting flags.
+                let now = Instant::now();
+                let is_stale = |tab: &crate::state::Tab| {
+                    tab.outputting
+                        && last_output
+                            .get(&tab.id)
+                            .map(|t| now.duration_since(*t) > idle)
+                            .unwrap_or(true)
+                };
+
+                let state = radio.read();
+                if state.tabs.iter().any(|t| is_stale(t)) {
+                    drop(state);
+                    let mut state = radio.write_channel(AppChannel::Tabs);
+                    for tab in &mut state.tabs {
+                        if is_stale(tab) {
+                            tab.outputting = false;
                         }
                     }
-                    TitleWatchResult::Closed(terminal_id) => {
-                        closed_ids.insert(terminal_id);
-                    }
-                    _ => {}
+                    last_output.retain(|id, _| state.tabs.iter().any(|t| t.id == *id));
                 }
             }
         });
