@@ -1,3 +1,7 @@
+use std::cell::RefCell;
+use std::collections::HashSet;
+use std::rc::Rc;
+
 use freya::prelude::*;
 use freya::radio::*;
 use freya::terminal::{TerminalHandle, TerminalId};
@@ -8,11 +12,15 @@ use crate::{
 };
 
 enum TitleWatchResult {
-    Changed(TabId, String),
-    Closed(TerminalId),
+    Changed(TabId, AccessibilityId, String),
+    Closed,
 }
 
-async fn watch_handle(tab_id: TabId, handle: TerminalHandle) -> TitleWatchResult {
+async fn watch_handle(
+    tab_id: TabId,
+    panel_id: AccessibilityId,
+    handle: TerminalHandle,
+) -> TitleWatchResult {
     let closed = futures::future::select(
         Box::pin(async {
             handle.clone().title_changed().await;
@@ -27,9 +35,9 @@ async fn watch_handle(tab_id: TabId, handle: TerminalHandle) -> TitleWatchResult
 
     match closed {
         futures::future::Either::Left(_) => {
-            TitleWatchResult::Changed(tab_id, handle.title().unwrap_or_default())
+            TitleWatchResult::Changed(tab_id, panel_id, handle.title().unwrap_or_default())
         }
-        futures::future::Either::Right(_) => TitleWatchResult::Closed(handle.id()),
+        futures::future::Either::Right(_) => TitleWatchResult::Closed,
     }
 }
 
@@ -50,41 +58,42 @@ impl Component for App {
         });
 
         let mut radio = use_radio(AppChannel::Tabs);
+        let watched = use_hook(|| Rc::new(RefCell::new(HashSet::<TerminalId>::new())));
 
-        use_future(move || async move {
-            let mut closed_ids = std::collections::HashSet::<TerminalId>::new();
-            loop {
-                let watchers = {
-                    let state = radio.read();
-                    state
-                        .tabs
-                        .iter()
-                        .flat_map(|tab| {
-                            let tab_id = tab.id;
-                            tab.panels
-                                .all_handles()
-                                .into_iter()
-                                .filter(|h| !closed_ids.contains(&h.id()))
-                                .map(move |h| Box::pin(watch_handle(tab_id, h)))
-                        })
-                        .collect::<Vec<_>>()
-                };
-
-                match futures::future::select_all(watchers).await.0 {
-                    TitleWatchResult::Changed(tab_id, title) if !title.is_empty() => {
-                        if let Some(tab) = radio
-                            .write_channel(AppChannel::Tabs)
-                            .tabs
-                            .iter_mut()
-                            .find(|t| t.id == tab_id)
-                        {
-                            tab.title = title;
-                        }
+        use_side_effect(move || {
+            let state = radio.read();
+            for tab in &state.tabs {
+                let tab_id = tab.id;
+                for (panel_id, handle) in tab.panels.all_panels() {
+                    if !watched.borrow().contains(&handle.id()) {
+                        watched.borrow_mut().insert(handle.id());
+                        let watched = watched.clone();
+                        let handle_id = handle.id();
+                        spawn(async move {
+                            loop {
+                                match watch_handle(tab_id, panel_id, handle.clone()).await {
+                                    TitleWatchResult::Changed(tab_id, panel_id, title)
+                                        if !title.is_empty() =>
+                                    {
+                                        let mut state =
+                                            radio.write_channel(AppChannel::Tabs);
+                                        if let Some(tab) =
+                                            state.tabs.iter_mut().find(|t| t.id == tab_id)
+                                        {
+                                            if tab.active_panel == panel_id {
+                                                tab.title = title;
+                                            }
+                                        }
+                                    }
+                                    TitleWatchResult::Closed => {
+                                        watched.borrow_mut().remove(&handle_id);
+                                        break;
+                                    }
+                                    _ => {}
+                                }
+                            }
+                        });
                     }
-                    TitleWatchResult::Closed(terminal_id) => {
-                        closed_ids.insert(terminal_id);
-                    }
-                    _ => {}
                 }
             }
         });
