@@ -21,7 +21,7 @@ impl Component for Panel {
         let mut radio = use_radio(AppChannel::Tabs);
         let focus = Focus::new_for_id(self.panel_id);
 
-        let mut dimensions = use_state(|| (0.0_f32, 0.0_f32));
+        let mut dimensions = use_state(|| (0.0, 0.0));
 
         let is_active = radio
             .read()
@@ -38,8 +38,9 @@ impl Component for Panel {
         };
 
         rect()
-            .expanded().padding(8.)
-                .background(bg_color)
+            .expanded()
+            .padding(8.)
+            .background(bg_color)
             .a11y_id(focus.a11y_id())
             .a11y_auto_focus(is_active)
             .on_key_up({
@@ -69,56 +70,23 @@ impl Component for Panel {
                         return;
                     }
 
-                    match &e.key {
-                        Key::Character(ch) if ctrl_shift && ch.eq_ignore_ascii_case("c") => {
+                   match &e.key {
+                        Key::Character(ch)
+                            if ctrl_shift && ch.eq_ignore_ascii_case("c") =>
+                        {
                             if let Some(text) = handle.get_selected_text() {
-                                let _ = freya::clipboard::Clipboard::set(text);
+                                let _ = Clipboard::set(text);
                             }
                         }
-                        Key::Character(ch) if ctrl_shift && ch.eq_ignore_ascii_case("v") => {
-                            if let Ok(text) = freya::clipboard::Clipboard::get() {
-                                let _ = handle.write(text.as_bytes());
+                        Key::Character(ch)
+                            if ctrl_shift && ch.eq_ignore_ascii_case("v") =>
+                        {
+                            if let Ok(text) = Clipboard::get() {
+                                let _ = handle.paste(&text);
                             }
-                        }
-                        Key::Character(ch) if ctrl && ch.len() == 1 => {
-                            let _ = handle.write(&[ch.as_bytes()[0] & 0x1f]);
-                        }
-                        Key::Named(NamedKey::Enter) => {
-                            let _ = handle.write(b"\r");
-                        }
-                        Key::Named(NamedKey::Backspace) => {
-                            let _ = handle.write(&[0x7f]);
-                        }
-                        Key::Named(NamedKey::Delete) => {
-                            let _ = handle.write(b"\x1b[3~");
-                        }
-                        Key::Named(NamedKey::Shift) => {
-                            handle.shift_pressed(true);
-                        }
-                        Key::Named(NamedKey::Tab) => {
-                            let _ = handle.write(b"\t");
-                            e.prevent_default();
-                            e.stop_propagation();
-                        }
-                        Key::Named(NamedKey::Escape) => {
-                            let _ = handle.write(&[0x1b]);
-                        }
-                        Key::Named(NamedKey::ArrowUp) => {
-                            let _ = handle.write(b"\x1b[A");
-                        }
-                        Key::Named(NamedKey::ArrowDown) => {
-                            let _ = handle.write(b"\x1b[B");
-                        }
-                        Key::Named(NamedKey::ArrowLeft) => {
-                            let _ = handle.write(b"\x1b[D");
-                        }
-                        Key::Named(NamedKey::ArrowRight) => {
-                            let _ = handle.write(b"\x1b[C");
                         }
                         _ => {
-                            if let Some(ch) = e.try_as_str() {
-                                let _ = handle.write(ch.as_bytes());
-                            }
+                            let _ = handle.write_key(&e.key, e.modifiers);
                         }
                     }
                 }

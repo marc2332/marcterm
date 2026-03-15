@@ -34,13 +34,25 @@ fn render_node(node: &PanelNode, font_size: f32, tab_id: &TabId) -> impl IntoEle
         .into_element(),
         PanelNode::Horizontal(left, right) => ResizableContainer::new()
             .direction(Direction::Horizontal)
-            .panel(ResizablePanel::new(50.).child(render_node(left, font_size, tab_id)))
-            .panel(ResizablePanel::new(50.).child(render_node(right, font_size, tab_id)))
+            .panel(
+                ResizablePanel::new(PanelSize::percent(50.))
+                    .child(render_node(left, font_size, tab_id)),
+            )
+            .panel(
+                ResizablePanel::new(PanelSize::percent(50.))
+                    .child(render_node(right, font_size, tab_id)),
+            )
             .into_element(),
         PanelNode::Vertical(top, bottom) => ResizableContainer::new()
             .direction(Direction::Vertical)
-            .panel(ResizablePanel::new(50.).child(render_node(top, font_size, tab_id)))
-            .panel(ResizablePanel::new(50.).child(render_node(bottom, font_size, tab_id)))
+            .panel(
+                ResizablePanel::new(PanelSize::percent(50.))
+                    .child(render_node(top, font_size, tab_id)),
+            )
+            .panel(
+                ResizablePanel::new(PanelSize::percent(50.))
+                    .child(render_node(bottom, font_size, tab_id)),
+            )
             .into_element(),
     }
 }
