@@ -1,6 +1,6 @@
 f:
     taplo fmt
-    cargo +nightly-2025-09-25 fmt --all -- --error-on-unformatted --unstable-features
+    cargo +nightly-2026-03-15 fmt --all -- --error-on-unformatted --unstable-features
 
 # Build and install the Flatpak locally
 flatpak:

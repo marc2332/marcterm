@@ -126,8 +126,8 @@ impl Component for TabButton {
                     .content(Content::flex())
                     .cross_align(Alignment::Center)
                     .main_align(Alignment::SpaceBetween)
-                    .on_pointer_enter(move |_| hovered.set(true))
-                    .on_pointer_leave(move |_| hovered.set(false))
+                    .on_pointer_over(move |_| hovered.set(true))
+                    .on_pointer_out(move |_| hovered.set(false))
                     .child(
                         OverflowedContent::new()
                             .width(Size::flex(1.))
