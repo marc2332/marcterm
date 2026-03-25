@@ -14,20 +14,23 @@ impl Component for TabBar {
     fn render(&self) -> impl IntoElement {
         let radio = use_radio(AppChannel::Tabs);
 
-        let tabs: Vec<TabButton> = {
+        let (tabs, sidebar_collapsed): (Vec<TabButton>, bool) = {
             let state = radio.read();
-            state
+            let tabs = state
                 .tabs
                 .iter()
                 .enumerate()
                 .map(|(i, t)| TabButton {
                     tab_id: t.id,
+                    index: i,
                     title: t.display_title().to_string(),
                     custom_title: t.custom_title.clone().unwrap_or_default(),
                     is_active: i == state.active_tab,
                     outputting: t.outputting,
+                    collapsed: state.sidebar_collapsed,
                 })
-                .collect()
+                .collect();
+            (tabs, state.sidebar_collapsed)
         };
 
         rect()
@@ -43,16 +46,14 @@ impl Component for TabBar {
                     .width(Size::fill())
                     .spacing(4.)
                     .show_scrollbar(false)
-                    .children(
-                        tabs.into_iter()
-                            .map(|tab| tab.into_element())
-                            .chain(std::iter::once(new_tab_button(radio).into_element())),
-                    ),
+                    .children(tabs.into_iter().map(|tab| tab.into_element()).chain(
+                        std::iter::once(new_tab_button(radio, sidebar_collapsed).into_element()),
+                    )),
             )
     }
 }
 
-fn new_tab_button(mut radio: AppRadio) -> impl IntoElement {
+fn new_tab_button(mut radio: AppRadio, collapsed: bool) -> impl IntoElement {
     Button::new()
         .flat()
         .width(Size::fill())
@@ -63,7 +64,14 @@ fn new_tab_button(mut radio: AppRadio) -> impl IntoElement {
         })
         .ripple()
         .color((230, 230, 230))
-        .child(
+        .child(if collapsed {
+            rect().width(Size::fill()).center().child(
+                svg(lucide::circle_plus())
+                    .width(Size::px(16.))
+                    .height(Size::px(16.))
+                    .stroke((200, 200, 200)),
+            )
+        } else {
             rect()
                 .width(Size::fill())
                 .horizontal()
@@ -75,8 +83,8 @@ fn new_tab_button(mut radio: AppRadio) -> impl IntoElement {
                         .height(Size::px(16.))
                         .stroke((200, 200, 200)),
                 )
-                .child(label().text("New Tab").font_size(14.)),
-        )
+                .child(label().text("New Tab").font_size(14.))
+        })
 }
 
 fn close_button(tab_id: TabId, mut radio: AppRadio) -> Element {
@@ -150,10 +158,12 @@ fn tab_title(title: String) -> Element {
 #[derive(PartialEq, Clone)]
 struct TabButton {
     tab_id: TabId,
+    index: usize,
     title: String,
     custom_title: String,
     is_active: bool,
     outputting: bool,
+    collapsed: bool,
 }
 
 impl Component for TabButton {
@@ -216,7 +226,7 @@ impl Component for TabButton {
 
         Button::new()
             .width(Size::fill())
-            .height(Size::px(32.))
+            .height(Size::px(35.))
             .flat()
             .rounded_lg()
             .background(background)
@@ -229,7 +239,16 @@ impl Component for TabButton {
             })
             .ripple()
             .color((230, 230, 230))
-            .child(
+            .child(if self.collapsed {
+                rect().width(Size::fill()).center().child(if outputting {
+                    loading_indicator(text_color)
+                } else {
+                    label()
+                        .text(format!("{}", self.index + 1))
+                        .font_size(14.)
+                        .into_element()
+                })
+            } else {
                 rect()
                     .width(Size::fill())
                     .horizontal()
@@ -260,8 +279,8 @@ impl Component for TabButton {
                         }
                     })
                     .child(title_element)
-                    .child(trailing),
-            )
+                    .child(trailing)
+            })
     }
 
     fn render_key(&self) -> DiffKey {
