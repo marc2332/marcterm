@@ -38,12 +38,40 @@ impl Component for TabBar {
                     .children(
                         tabs.into_iter()
                             .map(|(tab_id, title, is_active, outputting)| {
-                                TabButton {
-                                    tab_id,
-                                    title,
-                                    is_active,
-                                    outputting,
-                                }
+                                let drop_tab_id = tab_id;
+                                let drag_title = title.clone();
+                                DropZone::new(
+                                    DragZone::new(
+                                        tab_id,
+                                        TabButton {
+                                            tab_id,
+                                            title,
+                                            is_active,
+                                            outputting,
+                                        },
+                                    )
+                                    .show_while_dragging(false)
+                                    .drag_element(
+                                        rect()
+                                            .width(Size::px(200.))
+                                            .background((45, 45, 45))
+                                            .corner_radius(6.)
+                                            .padding(8.)
+                                            .layer(Layer::Overlay)
+                                            .child(
+                                                label()
+                                                    .text(drag_title)
+                                                    .font_size(14.)
+                                                    .color((230, 230, 230)),
+                                            ),
+                                    ),
+                                    move |dragged_id: TabId| {
+                                        radio
+                                            .write_channel(AppChannel::Tabs)
+                                            .move_tab(dragged_id, drop_tab_id);
+                                    },
+                                )
+                                .key(tab_id)
                                 .into_element()
                             })
                             .chain(std::iter::once(
