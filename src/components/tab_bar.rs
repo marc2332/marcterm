@@ -251,6 +251,7 @@ impl Component for TabButton {
             } else {
                 rect()
                     .width(Size::fill())
+                    .height(Size::fill())
                     .horizontal()
                     .font_size(14.)
                     .content(Content::flex())
