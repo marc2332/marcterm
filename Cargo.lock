@@ -1417,8 +1417,9 @@ checksum = "aa9a19cbb55df58761df49b23516a86d432839add4af60fc256da840f66ed35b"
 
 [[package]]
 name = "freya"
-version = "0.4.0-rc.15"
-source = "git+https://github.com/marc2332/freya?branch=feat%2Fbetter-drag-drop#506e098b4d2aa5207b88a8da44e56aeeacbab981"
+version = "0.4.0-rc.16"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "b5df2ca0782f24c992c85fa6acf4dc3d0617eb44327291c1990d5372f94f8511"
 dependencies = [
  "cfg-if",
  "freya-animation",
@@ -1429,6 +1430,7 @@ dependencies = [
  "freya-engine",
  "freya-icons",
  "freya-material-design",
+ "freya-performance-plugin",
  "freya-radio",
  "freya-terminal",
  "freya-winit",
@@ -1437,8 +1439,9 @@ dependencies = [
 
 [[package]]
 name = "freya-animation"
-version = "0.4.0-rc.15"
-source = "git+https://github.com/marc2332/freya?branch=feat%2Fbetter-drag-drop#506e098b4d2aa5207b88a8da44e56aeeacbab981"
+version = "0.4.0-rc.16"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "cb105b8cdd0350462e8d05debff09afc02506cf5efcd4f5125ed8b49df1b2f22"
 dependencies = [
  "async-io",
  "easer",
@@ -1447,8 +1450,9 @@ dependencies = [
 
 [[package]]
 name = "freya-clipboard"
-version = "0.4.0-rc.15"
-source = "git+https://github.com/marc2332/freya?branch=feat%2Fbetter-drag-drop#506e098b4d2aa5207b88a8da44e56aeeacbab981"
+version = "0.4.0-rc.16"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "b11e31074295192feed5a60f54d3b5f75153c1b7ee9eab2d623267f6533a4d7d"
 dependencies = [
  "copypasta",
  "freya-core",
@@ -1456,8 +1460,9 @@ dependencies = [
 
 [[package]]
 name = "freya-components"
-version = "0.4.0-rc.15"
-source = "git+https://github.com/marc2332/freya?branch=feat%2Fbetter-drag-drop#506e098b4d2aa5207b88a8da44e56aeeacbab981"
+version = "0.4.0-rc.16"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "057a507af4abcf51de7e67ee57d9b67955c3290fcc9768afba6cf52701627866"
 dependencies = [
  "accesskit",
  "anyhow",
@@ -1478,8 +1483,9 @@ dependencies = [
 
 [[package]]
 name = "freya-core"
-version = "0.4.0-rc.15"
-source = "git+https://github.com/marc2332/freya?branch=feat%2Fbetter-drag-drop#506e098b4d2aa5207b88a8da44e56aeeacbab981"
+version = "0.4.0-rc.16"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "ba4400c632e289662812294d6fd5cb49435386964ba183a6c7a83643c1cae617"
 dependencies = [
  "accesskit",
  "async-broadcast",
@@ -1505,8 +1511,9 @@ dependencies = [
 
 [[package]]
 name = "freya-edit"
-version = "0.4.0-rc.15"
-source = "git+https://github.com/marc2332/freya?branch=feat%2Fbetter-drag-drop#506e098b4d2aa5207b88a8da44e56aeeacbab981"
+version = "0.4.0-rc.16"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "16ad06a891df18f977cfb6833d8cdd972d5fc316b69767178f65b50183a8b82d"
 dependencies = [
  "bitflags 2.11.0",
  "freya-clipboard",
@@ -1519,8 +1526,9 @@ dependencies = [
 
 [[package]]
 name = "freya-engine"
-version = "0.4.0-rc.15"
-source = "git+https://github.com/marc2332/freya?branch=feat%2Fbetter-drag-drop#506e098b4d2aa5207b88a8da44e56aeeacbab981"
+version = "0.4.0-rc.16"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "71bfc21f9c93aac2018928b7446239833ba0b66b6c9711ba358efdf5d88311b1"
 dependencies = [
  "bitflags 2.11.0",
  "freya-skia-safe",
@@ -1528,16 +1536,18 @@ dependencies = [
 
 [[package]]
 name = "freya-icons"
-version = "0.4.0-rc.15"
-source = "git+https://github.com/marc2332/freya?branch=feat%2Fbetter-drag-drop#506e098b4d2aa5207b88a8da44e56aeeacbab981"
+version = "0.4.0-rc.16"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "78c98878bc62045481f52f1608166fbc562ce605ec50c034e1060c0a19870554"
 dependencies = [
  "bytes",
 ]
 
 [[package]]
 name = "freya-material-design"
-version = "0.4.0-rc.15"
-source = "git+https://github.com/marc2332/freya?branch=feat%2Fbetter-drag-drop#506e098b4d2aa5207b88a8da44e56aeeacbab981"
+version = "0.4.0-rc.16"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "dba66e674f37574c4c8cdd872835a48c9691576368c9b0deef439a09de4e8245"
 dependencies = [
  "freya-animation",
  "freya-components",
@@ -1548,25 +1558,29 @@ dependencies = [
 
 [[package]]
 name = "freya-performance-plugin"
-version = "0.4.0-rc.15"
-source = "git+https://github.com/marc2332/freya?branch=feat%2Fbetter-drag-drop#506e098b4d2aa5207b88a8da44e56aeeacbab981"
+version = "0.4.0-rc.16"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "095f3b5afb3d0302d18e764cd9bb2ffe26e4a3065bf11aa774c6a93312f48fc7"
 dependencies = [
+ "freya-core",
  "freya-engine",
  "freya-winit",
 ]
 
 [[package]]
 name = "freya-radio"
-version = "0.4.0-rc.15"
-source = "git+https://github.com/marc2332/freya?branch=feat%2Fbetter-drag-drop#506e098b4d2aa5207b88a8da44e56aeeacbab981"
+version = "0.4.0-rc.16"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "af51c9dcd7ef98229c651e4cd7d19d14db148a9483c77288959bea9e8153f0d4"
 dependencies = [
  "freya-core",
 ]
 
 [[package]]
 name = "freya-sdk"
-version = "0.4.0-rc.15"
-source = "git+https://github.com/marc2332/freya?branch=feat%2Fbetter-drag-drop#506e098b4d2aa5207b88a8da44e56aeeacbab981"
+version = "0.4.0-rc.16"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "aaf73686644ae602bef50973e7cdeaafab4ab0f24868f880ef25d5e999bfab6d"
 dependencies = [
  "async-io",
  "freya-core",
@@ -1616,8 +1630,9 @@ dependencies = [
 
 [[package]]
 name = "freya-terminal"
-version = "0.4.0-rc.15"
-source = "git+https://github.com/marc2332/freya?branch=feat%2Fbetter-drag-drop#506e098b4d2aa5207b88a8da44e56aeeacbab981"
+version = "0.4.0-rc.16"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "97c28ea7e1c05e87ca89e699e87fe38d891d5d0ae36790b60c4875386e0a3416"
 dependencies = [
  "blocking",
  "freya-core",
@@ -1635,8 +1650,9 @@ dependencies = [
 
 [[package]]
 name = "freya-winit"
-version = "0.4.0-rc.15"
-source = "git+https://github.com/marc2332/freya?branch=feat%2Fbetter-drag-drop#506e098b4d2aa5207b88a8da44e56aeeacbab981"
+version = "0.4.0-rc.16"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "6f91c7b67b0c5e72e0ab6f784a5e9932d476a82a766013be1d9c1e5a461a56c4"
 dependencies = [
  "accesskit",
  "accesskit_winit",
@@ -2277,7 +2293,7 @@ dependencies = [
 
 [[package]]
 name = "marcterm"
-version = "0.1.10"
+version = "0.1.11"
 dependencies = [
  "async-io",
  "clap",
@@ -3024,8 +3040,9 @@ checksum = "35fb2e5f958ec131621fdd531e9fc186ed768cbe395337403ae56c17a74c68ec"
 
 [[package]]
 name = "pathgraph"
-version = "0.4.0-rc.15"
-source = "git+https://github.com/marc2332/freya?branch=feat%2Fbetter-drag-drop#506e098b4d2aa5207b88a8da44e56aeeacbab981"
+version = "0.4.0-rc.16"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "a1df76fd1db87d9b53a3711b1463daf2afa6061ee3f60dfdd4f460ed9eeda833"
 
 [[package]]
 name = "percent-encoding"
@@ -3399,8 +3416,9 @@ checksum = "f8dcc9c7d52a811697d2151c701e0d08956f92b0e24136cf4cf27b57a6a0d9bf"
 
 [[package]]
 name = "ragnarok"
-version = "0.4.0-rc.15"
-source = "git+https://github.com/marc2332/freya?branch=feat%2Fbetter-drag-drop#506e098b4d2aa5207b88a8da44e56aeeacbab981"
+version = "0.4.0-rc.16"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "b43af38133a9763d0d44828f9442287dc60c6cd8699b2034fcf0a05a9acd06be"
 dependencies = [
  "euclid",
  "hotpath",
@@ -4303,8 +4321,9 @@ checksum = "ab16f14aed21ee8bfd8ec22513f7287cd4a91aa92e44edfe2c17ddd004e92607"
 
 [[package]]
 name = "torin"
-version = "0.4.0-rc.15"
-source = "git+https://github.com/marc2332/freya?branch=feat%2Fbetter-drag-drop#506e098b4d2aa5207b88a8da44e56aeeacbab981"
+version = "0.4.0-rc.16"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "ab3812c269c1fcd436c198597d44fca87455003a2f12deffc31622c826e7ec34"
 dependencies = [
  "euclid",
  "itertools 0.14.0",
